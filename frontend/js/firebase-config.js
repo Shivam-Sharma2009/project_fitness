@@ -4,15 +4,14 @@
 //  Get it from: Firebase Console → Project Settings → Your Apps
 // ============================================================
 
-// TODO: Replace with your actual Firebase config after creating project
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID",
-  measurementId:     "YOUR_MEASUREMENT_ID"
+  apiKey:            "AIzaSyAcl1tb-JW4T4P6rup_TNGMNXqfQ_wnTRE",
+  authDomain:        "fitness-innovexathetechlets.firebaseapp.com",
+  projectId:         "fitness-innovexathetechlets",
+  storageBucket:     "fitness-innovexathetechlets.firebasestorage.app",
+  messagingSenderId: "541024216414",
+  appId:             "1:541024216414:web:9017d878fc34c961105bcf",
+  measurementId:     "G-M2XSHC9WWM"
 };
 
 // ── Initialize Firebase ──
