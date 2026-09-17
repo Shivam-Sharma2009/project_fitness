@@ -1,427 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nutriton</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutrition Guide — SportFit</title>
+  <meta name="description" content="Meal plans, calorie counter, water tracker and daily nutrition tips.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
+
+    .page-hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(2,12,27,0.85), rgba(2,12,27,0.92)),
+        url("https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1400&q=80");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .page-hero h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 16px; }
+    .page-hero p { color: var(--text-muted); font-size: 17px; }
+
+    .content-section { padding: 60px 0 80px; }
+
+    .nutri-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .n-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--trans-mid);
+    }
+
+    .n-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(26,111,255,0.3);
+      box-shadow: var(--shadow-hover), var(--shadow-blue);
+    }
+
+    .n-card h3 { font-size: 20px; color: var(--green-accent); margin-bottom: 12px; }
+    .n-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+    .n-card p strong { color: var(--text-primary); }
+
+    /* Interactive Tracker Section */
+    .tracker-section {
+      background: linear-gradient(180deg, transparent, rgba(26,111,255,0.03) 50%, transparent);
+      padding: 80px 0;
+    }
+
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .tracker-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .tracker-card h3 {
+      font-size: 20px;
+      color: var(--blue-light);
+      margin-bottom: 8px;
+    }
+
+    .tracker-card p.desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .tracker-value {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      font-family: var(--font-heading);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tracker-input {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .tracker-input:focus { border-color: var(--blue-primary); }
+
+    .meal-list {
+      list-style: none;
+      text-align: left;
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .meal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--border-card);
+      font-size: 14px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    .meal-item span.time { color: var(--green-accent); font-weight: 600; font-size: 12px; }
+    .meal-item span.name { color: var(--text-primary); }
+
+    .del-btn {
+      background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px;
+    }
+
+    /* Tips & Meal Plan */
+    .tips-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      margin-top: 48px;
+    }
+    .tips-box h2 { font-size: 22px; color: var(--green-accent); margin-bottom: 20px; }
+    .tips-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+    .tip-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+    }
+    .tip-item strong { color: var(--text-primary); }
+
+    .quote-section {
+      text-align: center;
+      padding: 48px 20px;
+      font-family: var(--font-heading);
+      font-size: clamp(20px, 3vw, 32px);
+      color: var(--blue-light);
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nutrition Guide</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#031225;
-color:white;
-}
-
-header{
-background:#02101f;
-padding:25px;
-text-align:center;
-}
-
-header h1{
-color:#0d6efd;
-}
-
-.hero{
-padding:60px 20px;
-text-align:center;
-background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
-url("https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1400&q=80");
-background-size:cover;
-background-position:center;
-}
-
-.hero h2{
-font-size:45px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:18px;
-color:#ddd;
-}
-
-.container{
-width:90%;
-margin:auto;
-padding:50px 0;
-}
-
-.section-title{
-text-align:center;
-margin-bottom:30px;
-color:#29ff78;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:20px;
-}
-
-.card{
-background:#071a30;
-padding:25px;
-border-radius:12px;
-border:1px solid #234;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
-border-color:#0d6efd;
-}
-
-.card h3{
-color:#29ff78;
-margin-bottom:10px;
-}
-
-.card p{
-line-height:1.6;
-color:#ddd;
-}
-
-.meal-plan{
-margin-top:40px;
-background:#071a30;
-padding:25px;
-border-radius:12px;
-}
-
-.meal-plan h2{
-color:#29ff78;
-margin-bottom:15px;
-}
-
-.meal-plan p{
-margin:10px 0;
-}
-
-.tip{
-margin-top:40px;
-background:#071a30;
-padding:25px;
-border-radius:12px;
-}
-
-.tip h2{
-color:#29ff78;
-margin-bottom:15px;
-}
-
-.tip p{
-margin:8px 0;
-}
-
-.quote{
-margin-top:30px;
-text-align:center;
-font-size:24px;
-color:#0d6efd;
-font-weight:bold;
-}
-
-.back{
-display:inline-block;
-margin-top:30px;
-background:#0d6efd;
-padding:12px 20px;
-border-radius:8px;
-text-decoration:none;
-color:white;
-}
-
-footer{
-text-align:center;
-padding:20px;
-margin-top:40px;
-border-top:1px solid #234;
-}
-
-
-input,select{
-padding:10px;
-margin:8px;
-border:none;
-border-radius:6px;
-width:220px;
-}
-
-button{
-background:#0d6efd;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:8px;
-cursor:pointer;
-margin:5px;
-}
-
-button:hover{
-background:#0056d6;
-}
-
-#mealList{
-margin-top:15px;
-padding-left:20px;
-}
-
-#mealList li{
-margin:8px 0;
-}
 
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>🥗 NUTRITION GUIDE</h1>
-</header>
-
-<section class="hero">
-<h2>Eat Healthy, Live Better</h2>
-<p>
-Good nutrition is the foundation of a healthy and active lifestyle.
-</p>
-</section>
-
-<div class="container">
-
-<h2 class="section-title">
-Essential Nutrients
-</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>🍗 Protein</h3>
-<p>
-Protein helps build and repair muscles.
-Sources: Eggs, Chicken, Fish, Paneer, Milk, Soybean.
-</p>
-</div>
-
-<div class="card">
-<h3>🍚 Carbohydrates</h3>
-<p>
-Carbs provide energy for daily activities.
-Sources: Rice, Bread, Oats, Potato, Fruits.
-</p>
-</div>
-
-<div class="card">
-<h3>🥑 Healthy Fats</h3>
-<p>
-Healthy fats support brain and heart health.
-Sources: Nuts, Seeds, Avocado, Olive Oil.
-</p>
-</div>
-
-<div class="card">
-<h3>🥦 Vitamins & Minerals</h3>
-<p>
-Boost immunity and support body functions.
-Sources: Fruits, Vegetables and Dairy Products.
-</p>
-</div>
-
-</div>
-
-<div class="meal-plan">
-
-<h2>🍽 Sample Daily Meal Plan</h2>
-
-<p><b>Breakfast:</b> Oats + Milk + Banana</p>
-
-<p><b>Lunch:</b> Rice + Dal + Vegetables + Salad</p>
-
-<p><b>Evening Snack:</b> Fruits + Nuts</p>
-
-<p><b>Dinner:</b> Roti + Paneer/Chicken + Vegetables</p>
-
-</div>
-
-<div class="tip">
-
-<h2>💡 Nutrition Tips</h2>
-
-<p>✅ Drink 2-3 litres of water daily.</p>
-
-<p>✅ Eat fresh fruits and vegetables.</p>
-
-<p>✅ Avoid excessive junk food.</p>
-
-<p>✅ Include protein in every meal.</p>
-
-<p>✅ Do not skip breakfast.</p>
-
-<p>✅ Limit sugary drinks and snacks.</p>
-
-</div>
-
-<div class="quote">
-"Take care of your body. It’s the only place you have to live."
-</div>
-
-<div class="meal-plan">
-
-<h2>💧 Nutrition Tracker</h2>
-
-<!-- Water Tracker -->
-<h3>Water Tracker</h3>
-<p>Glasses Drank Today:</p>
-
-<h2 id="waterCount">0</h2>
-
-<button onclick="addWater()">
-+ Add Water
-</button>
-
-<hr style="margin:20px 0;">
-
-<!-- Calories Counter -->
-<h3>🔥 Calories Counter</h3>
-
-<input type="number"
-id="caloriesInput"
-placeholder="Enter Calories">
-
-<button onclick="addCalories()">
-Add Calories
-</button>
-
-<h2 id="totalCalories">
-0 kcal
-</h2>
-
-<hr style="margin:20px 0;">
-
-<!-- Meal Planner -->
-<h3>🍽 Meal Planner</h3>
-
-<input type="text"
-id="mealName"
-placeholder="Enter Meal Name">
-
-<select id="mealTime">
-<option>Breakfast</option>
-<option>Lunch</option>
-<option>Dinner</option>
-<option>Snack</option>
-</select>
-
-<button onclick="addMeal()">
-Add Meal
-</button>
-
-<ul id="mealList"></ul>
-
-</div>
-
-
-
-<center>
-<a href="home.html" class="back">
-← Back To Home
-</a>
-</center>
-
-</div>
-
-<footer>
-© 2026 SportFit | Nutrition Guide
-</footer>
-
-
-
-
-<script>
-
-let water=0;
-
-function addWater(){
-
-water++;
-
-document.getElementById("waterCount")
-.innerHTML=water;
-
-}
-
-let totalCalories=0;
-
-function addCalories(){
-
-let calories=
-Number(
-document.getElementById("caloriesInput").value
-);
-
-if(calories<=0){
-
-alert("Enter valid calories");
-
-return;
-
-}
-
-totalCalories+=calories;
-
-document.getElementById("totalCalories")
-.innerHTML=totalCalories+" kcal";
-
-document.getElementById("caloriesInput").value="";
-
-}
-
-function addMeal(){
-
-let meal=
-document.getElementById("mealName").value;
-
-let time=
-document.getElementById("mealTime").value;
-
-if(meal==""){
-
-alert("Enter Meal Name");
-
-return;
-
-}
-
-let li=document.createElement("li");
-
-li.innerHTML=
-"🍴 "+time+" : "+meal;
-
-document.getElementById("mealList")
-.appendChild(li);
-
-document.getElementById("mealName").value="";
-
-}
-
-</script>
-
-</body>
-</html>
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span><small class="logo-tag">STRONGER EVERYDAY</small></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html" class="active">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
+      <div id="nav-user-menu" style="display:none; align-items:center; gap:10px;">
+        <div class="user-avatar" id="nav-avatar">A</div>
+        <span style="font-size:13px; color:var(--text-muted);" id="nav-user-label">Athlete</span>
+      </div>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <section class="page-hero">
+    <span class="section-tag reveal">Nutrition Guide</span>
+    <h1 class="reveal">🥗 Eat Healthy, <span class="gradient-text-green">Live Better</span></h1>
+    <p class="reveal">Good nutrition is the foundation of a healthy and active lifestyle.</p>
+  </section>
+
+  <!-- ESSENTIAL NUTRIENTS -->
+  <section class="content-section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <h2 class="section-title">Essential <span class="gradient-text">Nutrients</span></h2>
+      </div>
+      <div class="nutri-grid">
+        <div class="n-card reveal reveal-delay-1">
+          <h3>🍗 Protein</h3>
+          <p>Protein helps build and repair muscles.<br><br><strong>Sources:</strong> Eggs, Chicken, Fish, Paneer, Milk, Soybean.</p>
+        </div>
+        <div class="n-card reveal reveal-delay-2">
+          <h3>🍚 Carbohydrates</h3>
+          <p>Carbs provide energy for daily activities.<br><br><strong>Sources:</strong> Rice, Bread, Oats, Potato, Fruits.</p>
+        </div>
+        <div class="n-card reveal reveal-delay-3">
+          <h3>🥑 Healthy Fats</h3>
+          <p>Healthy fats support brain and heart health.<br><br><strong>Sources:</strong> Nuts, Seeds, Avocado, Olive Oil.</p>
+        </div>
+        <div class="n-card reveal reveal-delay-4">
+          <h3>🥦 Vitamins & Minerals</h3>
+          <p>Boost immunity and support body functions.<br><br><strong>Sources:</strong> Fresh Fruits, Vegetables, Dairy Products.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE TRACKER -->
+  <section class="tracker-section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <span class="section-tag">Your Daily Log</span>
+        <h2 class="section-title">Nutrition <span class="gradient-text-green">Tracker</span></h2>
+      </div>
+
+      <div class="tracker-grid">
+        <!-- Water Tracker -->
+        <div class="tracker-card reveal reveal-delay-1">
+          <h3>💧 Water Tracker</h3>
+          <p class="desc">Goal: 8+ glasses per day</p>
+          <div class="tracker-value" id="waterCount">0</div>
+          <button class="btn btn-primary" onclick="addWater()">+ Add Glass</button>
+          <div style="margin-top:16px;">
+            <button class="btn btn-ghost btn-sm" onclick="resetWater()">Reset</button>
+          </div>
+        </div>
+
+        <!-- Calorie Tracker -->
+        <div class="tracker-card reveal reveal-delay-2">
+          <h3>🔥 Calorie Counter</h3>
+          <p class="desc">Track your daily intake</p>
+          <div class="tracker-value" id="totalCalories">0 <span style="font-size:20px; color:var(--text-muted);">kcal</span></div>
+          <div class="input-group">
+            <input type="number" id="caloriesInput" class="tracker-input" placeholder="e.g. 350">
+            <button class="btn btn-primary" onclick="addCalories()">Add</button>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="resetCalories()">Reset</button>
+        </div>
+
+        <!-- Meal Planner -->
+        <div class="tracker-card reveal reveal-delay-3">
+          <h3>🍽️ Meal Planner</h3>
+          <p class="desc">Log your meals for today</p>
+          <div class="input-group">
+            <select id="mealTime" class="tracker-input" style="flex:0.5;">
+              <option>Breakfast</option>
+              <option>Lunch</option>
+              <option>Snack</option>
+              <option>Dinner</option>
+            </select>
+            <input type="text" id="mealName" class="tracker-input" placeholder="Meal name">
+            <button class="btn btn-primary" onclick="addMeal()">Add</button>
+          </div>
+          <ul class="meal-list" id="mealList">
+            <!-- Meals will be injected here -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS & MEAL PLAN -->
+  <section class="content-section">
+    <div class="container">
+      <div class="tips-box reveal">
+        <h2>🍽️ Sample Daily Meal Plan</h2>
+        <div class="tips-list">
+          <div class="tip-item"><strong>Morning:</strong> Oats + Milk + Banana</div>
+          <div class="tip-item"><strong>Lunch:</strong> Rice + Dal + Vegetables + Salad</div>
+          <div class="tip-item"><strong>Evening:</strong> Fresh Fruits + Mixed Nuts</div>
+          <div class="tip-item"><strong>Dinner:</strong> Roti + Paneer/Chicken + Veggies</div>
+        </div>
+      </div>
+
+      <div class="tips-box reveal">
+        <h2>💡 Nutrition Tips</h2>
+        <div class="tips-list">
+          <div class="tip-item">✅ Drink 2-3 litres of water daily</div>
+          <div class="tip-item">✅ Include protein in every meal</div>
+          <div class="tip-item">✅ Do not skip breakfast</div>
+          <div class="tip-item">✅ Limit sugary drinks and snacks</div>
+          <div class="tip-item">✅ Avoid excessive junk food</div>
+          <div class="tip-item">✅ Eat fresh seasonal fruits and veg</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-section reveal">
+    "Take care of your body. It's the only place you have to live."
+  </div>
+
+  <div style="text-align:center; padding:0 0 80px;">
+    <a href="home.html" class="btn btn-outline btn-lg">← Back To Home</a>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-bottom" style="border:none;padding:0;">
+      <span>© 2026 SportFit | Nutrition Guide</span>
+    </div>
+  </footer>
+
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp, showToast } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+    window.showToast = showToast;
+  </script>
+
+  <script>
+    // --- INTERACTIVE TRACKER LOGIC (with localStorage) ---
+
+    // State
+    let state = {
+      water: 0,
+      calories: 0,
+      meals: []
+    };
+
+    // Load from localStorage on init
+    function loadState() {
+      const saved = localStorage.getItem('sportfit_nutrition');
+      if (saved) {
+        try {
+          state = JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse nutrition state");
+        }
+      }
+      render();
+    }
+
+    // Save to localStorage
+    function saveState() {
+      localStorage.setItem('sportfit_nutrition', JSON.stringify(state));
+      render();
+    }
+
+    // Update DOM
+    function render() {
+      document.getElementById('waterCount').textContent = state.water;
+      document.getElementById('totalCalories').innerHTML = `${state.calories} <span style="font-size:20px; color:var(--text-muted);">kcal</span>`;
+      
+      const mealList = document.getElementById('mealList');
+      mealList.innerHTML = '';
+      state.meals.forEach((meal, idx) => {
+        const li = document.createElement('li');
+        li.className = 'meal-item';
+        li.innerHTML = `
+          <div>
+            <span class="time">${meal.time}</span>
+            <span class="name" style="margin-left:8px;">${meal.name}</span>
+          </div>
+          <button class="del-btn" onclick="removeMeal(${idx})">✖</button>
+        `;
+        mealList.appendChild(li);
+      });
+    }
+
+    // Water
+    window.addWater = function() {
+      state.water++;
+      saveState();
+      if(window.showToast) window.showToast('Added a glass of water! 💧', 'success');
+    }
+    window.resetWater = function() {
+      state.water = 0;
+      saveState();
+    }
+
+    // Calories
+    window.addCalories = function() {
+      const input = document.getElementById('caloriesInput');
+      const val = parseInt(input.value);
+      if (isNaN(val) || val <= 0) {
+        if(window.showToast) window.showToast('Enter valid calories', 'error');
+        return;
+      }
+      state.calories += val;
+      input.value = '';
+      saveState();
+      if(window.showToast) window.showToast(`Added ${val} kcal! 🔥`, 'success');
+    }
+    window.resetCalories = function() {
+      state.calories = 0;
+      saveState();
+    }
+
+    // Meals
+    window.addMeal = function() {
+      const name = document.getElementById('mealName').value.trim();
+      const time = document.getElementById('mealTime').value;
+      if (!name) {
+        if(window.showToast) window.showToast('Enter meal name', 'error');
+        return;
+      }
+      state.meals.push({ name, time });
+      document.getElementById('mealName').value = '';
+      saveState();
+      if(window.showToast) window.showToast('Meal logged! 🍽️', 'success');
+    }
+    window.removeMeal = function(idx) {
+      state.meals.splice(idx, 1);
+      saveState();
+    }
+
+    // Initialize
+    loadState();
+  </script>
 </body>
 </html>

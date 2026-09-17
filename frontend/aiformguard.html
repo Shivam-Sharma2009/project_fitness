@@ -1,422 +1,486 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>AI Form Guard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Form Guard — SportFit</title>
+  <meta name="description" content="Real-time posture detection and automatic rep counting.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
 
-<style>
-body{
-    background:#0b1220;
-    color:white;
-    font-family:Arial;
-    text-align:center;
-}
+    .page-hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      position: relative;
+    }
 
-.container{
-    width:80%;
-    margin:auto;
-}
+    .page-hero h1 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 12px; }
+    .page-hero p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto; }
 
-.video-wrap{
-    position:relative;
-    display:inline-block;
-}
+    .content-section { padding: 40px 0 80px; }
 
-video{
-    width:600px;
-    max-width:100%;
-    border-radius:15px;
-    border:3px solid #00bfff;
-    display:block;
-    transform:scaleX(-1); /* mirror, like a real mirror */
-}
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-canvas#output{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    border-radius:15px;
-    transform:scaleX(-1);
-    pointer-events:none;
-}
+    @media (min-width: 992px) {
+      .ai-grid { grid-template-columns: 2fr 1fr; }
+    }
 
-.card{
-    background:#16213e;
-    padding:20px;
-    margin:15px;
-    border-radius:12px;
-}
+    /* Video Container */
+    .video-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      text-align: center;
+    }
 
-button{
-    background:#00bfff;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    margin:5px;
-    font-size:15px;
-}
+    .video-wrap {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      background: #020813;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      border: 2px solid var(--border-card);
+    }
 
-button:hover{
-    background:#0099cc;
-}
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      display: block;
+    }
 
-button:disabled{
-    background:#33475e;
-    cursor:not-allowed;
-}
+    canvas#output {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      transform: scaleX(-1);
+      pointer-events: none;
+    }
 
-.correct{
-    color:lime;
-    font-size:24px;
-}
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
 
-.wrong{
-    color:red;
-    font-size:24px;
-}
+    #camStatus {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 15px;
+      color: var(--text-muted);
+    }
+    #camStatus.on { color: var(--green-accent); }
 
-.neutral{
-    color:#ffd166;
-    font-size:24px;
-}
+    #loadMsg {
+      font-size: 13px;
+      color: var(--blue-light);
+      margin-top: 10px;
+      min-height: 20px;
+    }
 
-#camStatus{
-    margin:15px;
-    font-size:22px;
-    font-weight:bold;
-}
+    /* Side Panel */
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
 
-#loadMsg{
-    font-size:14px;
-    color:#9fb3d1;
-    margin-top:8px;
-}
+    .panel-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
 
-.mode-toggle{
-    margin:10px 0;
-}
+    .panel-card h2 {
+      font-size: 18px;
+      color: var(--blue-light);
+      margin-bottom: 16px;
+    }
 
-.mode-toggle button.active{
-    background:#0099cc;
-    box-shadow:0 0 0 2px #00bfff inset;
-}
-</style>
+    .mode-toggle {
+      display: flex;
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      margin-bottom: 24px;
+    }
 
+    .mode-btn {
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--trans-fast);
+    }
+
+    .mode-btn.active {
+      background: var(--blue-primary);
+      color: white;
+    }
+
+    .rep-count {
+      font-size: 64px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: var(--font-heading);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .rep-label {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .manual-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    #status {
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+    }
+
+    .status-correct { color: #29ff78; border-color: rgba(41,255,120,0.3) !important; background: rgba(41,255,120,0.05) !important; }
+    .status-wrong { color: #ef4444; border-color: rgba(239,68,68,0.3) !important; background: rgba(239,68,68,0.05) !important; }
+    .status-neutral { color: var(--text-muted); }
+
+  </style>
 </head>
 <body>
 
-<div class="container">
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-<h1>🏋 AI Form Guard</h1>
+  <section class="page-hero">
+    <span class="section-tag reveal">AI Feature</span>
+    <h1 class="reveal">AI Form <span class="gradient-text-green">Guard</span></h1>
+    <p class="reveal">Real-time posture detection and automatic rep counting using your device camera.</p>
+  </section>
 
-<h3 id="camStatus">🔴 Camera OFF</h3>
+  <section class="content-section">
+    <div class="container">
+      <div class="ai-grid">
+        
+        <!-- Camera Area -->
+        <div class="video-card reveal">
+          <div id="camStatus">🔴 Camera OFF</div>
+          <div class="video-wrap">
+            <video id="camera" autoplay playsinline muted></video>
+            <canvas id="output"></canvas>
+          </div>
+          <p id="loadMsg"></p>
+          <div class="controls">
+            <button class="btn btn-primary" onclick="startCamera()">📷 Open Camera</button>
+            <button class="btn btn-outline" onclick="stopCamera()">❌ Close Camera</button>
+          </div>
+        </div>
 
-<div class="video-wrap">
-  <video id="camera" autoplay playsinline muted></video>
-  <canvas id="output"></canvas>
-</div>
+        <!-- Sidebar -->
+        <div class="side-panel reveal reveal-delay-1">
+          <div class="panel-card">
+            <h2>Exercise Counter</h2>
+            <div class="mode-toggle">
+              <button id="pushupBtn" class="mode-btn active" onclick="setExercise('pushup')">Push-up</button>
+              <button id="squatBtn" class="mode-btn" onclick="setExercise('squat')">Squat</button>
+            </div>
+            
+            <div class="rep-count" id="count">0</div>
+            <div class="rep-label" id="repLabel">Push-up Count</div>
+            
+            <div class="manual-controls">
+              <button class="btn btn-ghost btn-sm" onclick="increaseRep()">+1 Manual</button>
+              <button class="btn btn-ghost btn-sm" onclick="resetRep()">Reset</button>
+            </div>
+          </div>
 
-<br>
+          <div class="panel-card">
+            <h2>Form Status</h2>
+            <div id="status" class="status-neutral">Camera off — auto detection paused</div>
+          </div>
+          
+          <div style="text-align:center;">
+             <a href="home.html" class="btn btn-ghost">← Back To Home</a>
+          </div>
+        </div>
 
-<button onclick="startCamera()">📷 Open Camera</button>
-<button onclick="stopCamera()">❌ Close Camera</button>
+      </div>
+    </div>
+  </section>
 
-<p id="loadMsg"></p>
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+  </script>
 
-<div class="card">
-<h2>Exercise Counter</h2>
+  <!-- Human.js for AI pose detection -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/human/3.3.6/human.js"></script>
 
-<div class="mode-toggle">
-  <button id="pushupBtn" class="active" onclick="setExercise('pushup')">Push-up</button>
-  <button id="squatBtn" onclick="setExercise('squat')">Squat</button>
-</div>
+  <script>
+    let reps = 0;
+    let stream = null;
+    let human = null;
+    let detecting = false;
+    let exercise = "pushup"; 
+    let repPhase = "up"; 
+    let rafId = null;
 
-<h1 id="count">0</h1>
-<p id="repLabel">Push-up Count</p>
+    const videoEl = document.getElementById("camera");
+    const canvasEl = document.getElementById("output");
+    const ctx = canvasEl.getContext("2d");
 
-<button onclick="increaseRep()">+1 Rep (manual)</button>
-<button onclick="resetRep()">Reset</button>
-
-</div>
-
-<div class="card">
-
-<h2>Form Status</h2>
-
-<p id="status" class="neutral">
-Camera off — auto detection paused
-</p>
-
-</div>
-
-</div>
-
-<!-- Human library: bundles TensorFlow.js + pose detection models in one file -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/human/3.3.6/human.js"></script>
-
-<script>
-
-let reps = 0;
-let stream = null;
-let human = null;
-let detecting = false;
-let exercise = "pushup"; // "pushup" or "squat"
-let repPhase = "up"; // "up" = extended/standing, "down" = bent
-let rafId = null;
-
-const videoEl = document.getElementById("camera");
-const canvasEl = document.getElementById("output");
-const ctx = canvasEl.getContext("2d");
-
-// ---------- Human.js setup ----------
-
-function getHuman(){
-    if(human) return human;
-    human = new Human.Human({
-        modelBasePath: "https://vladmandic.github.io/human-models/models/",
-        body: { enabled: true, minConfidence: 0.2 },
-        face: { enabled: false },
-        hand: { enabled: false },
-        object: { enabled: false },
-        gesture: { enabled: false },
-        segmentation: { enabled: false }
-        // backend left unset on purpose — let Human auto-pick the best
-        // available backend (humangl/webgl/wasm) for this browser
-    });
-    return human;
-}
-
-// ---------- Camera controls ----------
-
-async function startCamera(){
-    if(typeof Human === "undefined"){
-        alert("AI library failed to load from CDN. Check your internet connection and reload the page. Camera + manual counting will still work.");
-    }
-
-    // Step 1: get camera access
-    try{
-        stream = await navigator.mediaDevices.getUserMedia({ video:true });
-        videoEl.srcObject = stream;
-        document.getElementById("camStatus").innerHTML = "🟢 Camera ON";
-    }catch(error){
-        alert("Camera Permission Denied");
-        return;
-    }
-
-    // Step 2: wait for the video to actually have frame data
-    // (BUG FIX: previously the 'loadedmetadata' listener was attached AFTER
-    // await-ing the model load, so the event had usually already fired by
-    // then and the listener never ran — detection never started.)
-    await waitForVideoReady(videoEl);
-    canvasEl.width = videoEl.videoWidth;
-    canvasEl.height = videoEl.videoHeight;
-
-    // Step 3: load the AI model
-    try{
-        document.getElementById("loadMsg").innerText = "Loading AI model, please wait...";
-        const h = getHuman();
-        await h.load();
-        await h.warmup();
-        document.getElementById("loadMsg").innerText = "Model ready — auto counting is live.";
-    }catch(error){
-        console.error("Human.js load error:", error);
-        document.getElementById("loadMsg").innerText =
-            "⚠ Could not load AI model (check your internet connection). Manual +1 Rep still works.";
-        setStatus("Auto detection unavailable — use manual +1 Rep", "wrong");
-        return;
-    }
-
-    // Step 4: start the detection loop
-    setStatus("Detecting pose...", "neutral");
-    detecting = true;
-    detectLoop();
-}
-
-function waitForVideoReady(video){
-    // readyState >= 2 (HAVE_CURRENT_DATA) means videoWidth/videoHeight are already valid
-    if(video.readyState >= 2 && video.videoWidth > 0) return Promise.resolve();
-    return new Promise(resolve => {
-        video.addEventListener("loadeddata", function onReady(){
-            video.removeEventListener("loadeddata", onReady);
-            resolve();
+    function getHuman(){
+        if(human) return human;
+        human = new Human.Human({
+            modelBasePath: "https://vladmandic.github.io/human-models/models/",
+            body: { enabled: true, minConfidence: 0.2 },
+            face: { enabled: false }, hand: { enabled: false }, object: { enabled: false }, gesture: { enabled: false }, segmentation: { enabled: false }
         });
-    });
-}
-
-function stopCamera(){
-    detecting = false;
-    if(rafId) cancelAnimationFrame(rafId);
-
-    if(stream){
-        stream.getTracks().forEach(track => track.stop());
-        videoEl.srcObject = null;
-        document.getElementById("camStatus").innerHTML = "🔴 Camera OFF";
-    }
-    ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
-    document.getElementById("loadMsg").innerText = "";
-    setStatus("Camera off — auto detection paused", "neutral");
-}
-
-// ---------- Exercise mode ----------
-
-function setExercise(ex){
-    exercise = ex;
-    repPhase = "up";
-    document.getElementById("pushupBtn").classList.toggle("active", ex === "pushup");
-    document.getElementById("squatBtn").classList.toggle("active", ex === "squat");
-    document.getElementById("repLabel").innerText = ex === "pushup" ? "Push-up Count" : "Squat Count";
-}
-
-// ---------- Manual counter (kept as backup / correction) ----------
-
-function increaseRep(){
-    reps++;
-    document.getElementById("count").innerText = reps;
-}
-
-function resetRep(){
-    reps = 0;
-    document.getElementById("count").innerText = reps;
-}
-
-function setStatus(text, cls){
-    const s = document.getElementById("status");
-    s.innerText = text;
-    s.className = cls;
-}
-
-// ---------- Pose math ----------
-
-function angleBetween(a, b, c){
-    // angle at point b, formed by b->a and b->c, in degrees
-    const abx = a[0]-b[0], aby = a[1]-b[1];
-    const cbx = c[0]-b[0], cby = c[1]-b[1];
-    const dot = abx*cbx + aby*cby;
-    const magAB = Math.sqrt(abx*abx + aby*aby);
-    const magCB = Math.sqrt(cbx*cbx + cby*cby);
-    if(magAB === 0 || magCB === 0) return null;
-    let cosA = dot / (magAB * magCB);
-    cosA = Math.max(-1, Math.min(1, cosA));
-    return Math.acos(cosA) * (180/Math.PI);
-}
-
-function findKeypoint(keypoints, name){
-    const kp = keypoints.find(k => k.part === name);
-    if(!kp || kp.score < 0.2) return null;
-    return kp.position;
-}
-
-function drawSkeleton(keypoints){
-    ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
-    ctx.fillStyle = "#00bfff";
-    ctx.strokeStyle = "#00bfff";
-    ctx.lineWidth = 3;
-
-    keypoints.forEach(kp => {
-        if(kp.score > 0.2){
-            ctx.beginPath();
-            ctx.arc(kp.position[0], kp.position[1], 5, 0, 2*Math.PI);
-            ctx.fill();
-        }
-    });
-
-    const pairs = [
-        ["leftShoulder","rightShoulder"], ["leftHip","rightHip"],
-        ["leftShoulder","leftHip"], ["rightShoulder","rightHip"],
-        ["leftShoulder","leftElbow"], ["leftElbow","leftWrist"],
-        ["rightShoulder","rightElbow"], ["rightElbow","rightWrist"],
-        ["leftHip","leftKnee"], ["leftKnee","leftAnkle"],
-        ["rightHip","rightKnee"], ["rightKnee","rightAnkle"]
-    ];
-    pairs.forEach(([a,b]) => {
-        const pa = findKeypoint(keypoints, a);
-        const pb = findKeypoint(keypoints, b);
-        if(pa && pb){
-            ctx.beginPath();
-            ctx.moveTo(pa[0], pa[1]);
-            ctx.lineTo(pb[0], pb[1]);
-            ctx.stroke();
-        }
-    });
-}
-
-// Thresholds: tweak these if counting feels too strict/loose for your camera angle
-const PUSHUP_DOWN_ANGLE = 90;   // elbow angle below this = "down" position
-const PUSHUP_UP_ANGLE = 150;    // elbow angle above this = "up" position
-const SQUAT_DOWN_ANGLE = 100;   // knee angle below this = "down" position
-const SQUAT_UP_ANGLE = 160;     // knee angle above this = "up" position
-
-function evaluateRep(keypoints){
-    let angle = null;
-    let downThresh, upThresh, formLabel;
-
-    if(exercise === "pushup"){
-        const shoulder = findKeypoint(keypoints, "leftShoulder") || findKeypoint(keypoints, "rightShoulder");
-        const elbow = findKeypoint(keypoints, "leftElbow") || findKeypoint(keypoints, "rightElbow");
-        const wrist = findKeypoint(keypoints, "leftWrist") || findKeypoint(keypoints, "rightWrist");
-        if(shoulder && elbow && wrist){
-            angle = angleBetween(shoulder, elbow, wrist);
-        }
-        downThresh = PUSHUP_DOWN_ANGLE;
-        upThresh = PUSHUP_UP_ANGLE;
-        formLabel = "elbow";
-    } else {
-        const hip = findKeypoint(keypoints, "leftHip") || findKeypoint(keypoints, "rightHip");
-        const knee = findKeypoint(keypoints, "leftKnee") || findKeypoint(keypoints, "rightKnee");
-        const ankle = findKeypoint(keypoints, "leftAnkle") || findKeypoint(keypoints, "rightAnkle");
-        if(hip && knee && ankle){
-            angle = angleBetween(hip, knee, ankle);
-        }
-        downThresh = SQUAT_DOWN_ANGLE;
-        upThresh = SQUAT_UP_ANGLE;
-        formLabel = "knee";
+        return human;
     }
 
-    if(angle === null){
-        setStatus("Body not fully visible — step back so " + formLabel + " joints are in frame", "neutral");
-        return;
+    async function startCamera(){
+        if(typeof Human === "undefined"){
+            alert("AI library failed to load. Manual counting will still work.");
+        }
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video:true });
+            videoEl.srcObject = stream;
+            document.getElementById("camStatus").innerHTML = "🟢 Camera ON";
+            document.getElementById("camStatus").classList.add("on");
+        } catch(error) {
+            alert("Camera Permission Denied");
+            return;
+        }
+
+        await waitForVideoReady(videoEl);
+        canvasEl.width = videoEl.videoWidth;
+        canvasEl.height = videoEl.videoHeight;
+
+        try {
+            document.getElementById("loadMsg").innerText = "Loading AI model, please wait...";
+            const h = getHuman();
+            await h.load();
+            await h.warmup();
+            document.getElementById("loadMsg").innerText = "Model ready — auto counting is live.";
+        } catch(error) {
+            document.getElementById("loadMsg").innerText = "⚠ Could not load AI model. Manual +1 Rep still works.";
+            setStatus("Auto detection unavailable", "status-wrong");
+            return;
+        }
+
+        setStatus("Detecting pose...", "status-neutral");
+        detecting = true;
+        detectLoop();
     }
 
-    const angleTxt = Math.round(angle) + "°";
+    function waitForVideoReady(video){
+        if(video.readyState >= 2 && video.videoWidth > 0) return Promise.resolve();
+        return new Promise(resolve => {
+            video.addEventListener("loadeddata", function onReady(){
+                video.removeEventListener("loadeddata", onReady);
+                resolve();
+            });
+        });
+    }
 
-    if(repPhase === "up" && angle < downThresh){
-        repPhase = "down";
-        setStatus("Down position ✔ (" + angleTxt + ")", "correct");
-    } else if(repPhase === "down" && angle > upThresh){
+    window.stopCamera = function(){
+        detecting = false;
+        if(rafId) cancelAnimationFrame(rafId);
+        if(stream){
+            stream.getTracks().forEach(track => track.stop());
+            videoEl.srcObject = null;
+            document.getElementById("camStatus").innerHTML = "🔴 Camera OFF";
+            document.getElementById("camStatus").classList.remove("on");
+        }
+        ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
+        document.getElementById("loadMsg").innerText = "";
+        setStatus("Camera off — auto detection paused", "status-neutral");
+    }
+
+    window.setExercise = function(ex){
+        exercise = ex;
         repPhase = "up";
+        document.getElementById("pushupBtn").classList.toggle("active", ex === "pushup");
+        document.getElementById("squatBtn").classList.toggle("active", ex === "squat");
+        document.getElementById("repLabel").innerText = ex === "pushup" ? "Push-up Count" : "Squat Count";
+    }
+
+    window.increaseRep = function(){
         reps++;
         document.getElementById("count").innerText = reps;
-        setStatus("Rep counted! ✔ (" + angleTxt + ")", "correct");
-    } else {
-        setStatus("Tracking... " + formLabel + " angle: " + angleTxt, "neutral");
     }
-}
 
-// ---------- Main detection loop ----------
+    window.resetRep = function(){
+        reps = 0;
+        document.getElementById("count").innerText = reps;
+    }
 
-async function detectLoop(){
-    if(!detecting) return;
-    try{
-        const result = await human.detect(videoEl);
-        if(result.body && result.body.length > 0){
-            const keypoints = result.body[0].keypoints;
-            drawSkeleton(keypoints);
-            evaluateRep(keypoints);
+    function setStatus(text, cls){
+        const s = document.getElementById("status");
+        s.innerText = text;
+        s.className = cls;
+    }
+
+    function angleBetween(a, b, c){
+        const abx = a[0]-b[0], aby = a[1]-b[1];
+        const cbx = c[0]-b[0], cby = c[1]-b[1];
+        const dot = abx*cbx + aby*cby;
+        const magAB = Math.sqrt(abx*abx + aby*aby);
+        const magCB = Math.sqrt(cbx*cbx + cby*cby);
+        if(magAB === 0 || magCB === 0) return null;
+        let cosA = dot / (magAB * magCB);
+        cosA = Math.max(-1, Math.min(1, cosA));
+        return Math.acos(cosA) * (180/Math.PI);
+    }
+
+    function findKeypoint(keypoints, name){
+        const kp = keypoints.find(k => k.part === name);
+        if(!kp || kp.score < 0.2) return null;
+        return kp.position;
+    }
+
+    function drawSkeleton(keypoints){
+        ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
+        ctx.fillStyle = "#0d6efd";
+        ctx.strokeStyle = "#0d6efd";
+        ctx.lineWidth = 4;
+
+        keypoints.forEach(kp => {
+            if(kp.score > 0.2){
+                ctx.beginPath();
+                ctx.arc(kp.position[0], kp.position[1], 6, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        });
+
+        const pairs = [
+            ["leftShoulder","rightShoulder"], ["leftHip","rightHip"],
+            ["leftShoulder","leftHip"], ["rightShoulder","rightHip"],
+            ["leftShoulder","leftElbow"], ["leftElbow","leftWrist"],
+            ["rightShoulder","rightElbow"], ["rightElbow","rightWrist"],
+            ["leftHip","leftKnee"], ["leftKnee","leftAnkle"],
+            ["rightHip","rightKnee"], ["rightKnee","rightAnkle"]
+        ];
+        pairs.forEach(([a,b]) => {
+            const pa = findKeypoint(keypoints, a);
+            const pb = findKeypoint(keypoints, b);
+            if(pa && pb){
+                ctx.beginPath();
+                ctx.moveTo(pa[0], pa[1]);
+                ctx.lineTo(pb[0], pb[1]);
+                ctx.stroke();
+            }
+        });
+    }
+
+    const PUSHUP_DOWN_ANGLE = 90;   
+    const PUSHUP_UP_ANGLE = 150;    
+    const SQUAT_DOWN_ANGLE = 100;   
+    const SQUAT_UP_ANGLE = 160;     
+
+    function evaluateRep(keypoints){
+        let angle = null;
+        let downThresh, upThresh, formLabel;
+
+        if(exercise === "pushup"){
+            const shoulder = findKeypoint(keypoints, "leftShoulder") || findKeypoint(keypoints, "rightShoulder");
+            const elbow = findKeypoint(keypoints, "leftElbow") || findKeypoint(keypoints, "rightElbow");
+            const wrist = findKeypoint(keypoints, "leftWrist") || findKeypoint(keypoints, "rightWrist");
+            if(shoulder && elbow && wrist) angle = angleBetween(shoulder, elbow, wrist);
+            downThresh = PUSHUP_DOWN_ANGLE; upThresh = PUSHUP_UP_ANGLE; formLabel = "elbow";
         } else {
-            ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
-            setStatus("No person detected", "wrong");
+            const hip = findKeypoint(keypoints, "leftHip") || findKeypoint(keypoints, "rightHip");
+            const knee = findKeypoint(keypoints, "leftKnee") || findKeypoint(keypoints, "rightKnee");
+            const ankle = findKeypoint(keypoints, "leftAnkle") || findKeypoint(keypoints, "rightAnkle");
+            if(hip && knee && ankle) angle = angleBetween(hip, knee, ankle);
+            downThresh = SQUAT_DOWN_ANGLE; upThresh = SQUAT_UP_ANGLE; formLabel = "knee";
         }
-    }catch(e){
-        console.error(e);
+
+        if(angle === null){
+            setStatus(`Step back so ${formLabel} joints are in frame`, "status-neutral");
+            return;
+        }
+
+        const angleTxt = Math.round(angle) + "°";
+
+        if(repPhase === "up" && angle < downThresh){
+            repPhase = "down";
+            setStatus(`Down position ✔ (${angleTxt})`, "status-correct");
+        } else if(repPhase === "down" && angle > upThresh){
+            repPhase = "up";
+            reps++;
+            document.getElementById("count").innerText = reps;
+            setStatus(`Rep counted! ✔ (${angleTxt})`, "status-correct");
+        } else {
+            setStatus(`Tracking... ${formLabel} angle: ${angleTxt}`, "status-neutral");
+        }
     }
-    rafId = requestAnimationFrame(detectLoop);
-}
 
-</script>
-
+    async function detectLoop(){
+        if(!detecting) return;
+        try{
+            const result = await human.detect(videoEl);
+            if(result.body && result.body.length > 0){
+                const keypoints = result.body[0].keypoints;
+                drawSkeleton(keypoints);
+                evaluateRep(keypoints);
+            } else {
+                ctx.clearRect(0,0,canvasEl.width, canvasEl.height);
+                setStatus("No person detected", "status-wrong");
+            }
+        }catch(e){
+            console.error(e);
+        }
+        rafId = requestAnimationFrame(detectLoop);
+    }
+    window.startCamera = startCamera;
+  </script>
 </body>
 </html>

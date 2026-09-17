@@ -1,213 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PW Care - Community Support</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PW Care — SportFit</title>
+  <meta name="description" content="Community Support for Fitness. Donate or request help.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
 
-<style>
+    .page-hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+    }
 
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#031225;
-    color:white;
-}
+    .page-hero h1 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 12px; }
+    .page-hero p { color: var(--text-muted); font-size: 16px; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-header{
-    background:#020d1d;
-    padding:20px;
-    text-align:center;
-    border-bottom:1px solid #1e3552;
-}
+    .content-section { padding: 40px 0 80px; }
 
-header h1{
-    color:#1677ff;
-}
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
 
-.hero{
-    text-align:center;
-    padding:60px 20px;
-}
+    .f-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      transition: all var(--trans-mid);
+    }
 
-.hero h2{
-    font-size:40px;
-    margin-bottom:15px;
-}
+    .f-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(13,110,253,0.3);
+      box-shadow: var(--shadow-hover), var(--shadow-blue);
+    }
 
-.hero p{
-    color:#bbb;
-    max-width:700px;
-    margin:auto;
-    line-height:1.7;
-}
+    .f-card .icon { font-size: 40px; margin-bottom: 16px; }
+    .f-card h3 { font-size: 18px; color: var(--blue-light); margin-bottom: 12px; }
+    .f-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-.features{
-    width:90%;
-    margin:40px auto;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-}
+    /* Donate Form */
+    .donate-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-card);
+    }
 
-.card{
-    background:#071a30;
-    border:1px solid #26384e;
-    border-radius:12px;
-    padding:25px;
-    text-align:center;
-    transition:.3s;
-}
+    .donate-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-.card:hover{
-    transform:translateY(-8px);
-    border-color:#1677ff;
-}
+    .donate-header h2 {
+      font-size: 26px;
+      color: var(--blue-light);
+      margin-bottom: 8px;
+    }
 
-.icon{
-    font-size:45px;
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
 
-.card h3{
-    margin:15px 0;
-}
+    @media (min-width: 600px) {
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .full-width { grid-column: 1 / -1; }
+    }
 
-.card p{
-    color:#bbb;
-    line-height:1.6;
-}
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: var(--trans-fast);
+    }
 
-.donate-section{
-    width:90%;
-    max-width:800px;
-    margin:50px auto;
-    background:#071a30;
-    padding:30px;
-    border-radius:12px;
-    border:1px solid #26384e;
-}
+    .form-input:focus {
+      border-color: var(--blue-primary);
+      outline: none;
+    }
 
-.donate-section h2{
-    text-align:center;
-    margin-bottom:25px;
-}
+    textarea.form-input {
+      resize: vertical;
+      min-height: 120px;
+    }
 
-input, textarea{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border:none;
-    border-radius:6px;
-    background:#10243f;
-    color:white;
-}
-
-button{
-    width:100%;
-    padding:14px;
-    background:#1677ff;
-    border:none;
-    border-radius:6px;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    opacity:.9;
-}
-
-footer{
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-    border-top:1px solid #26384e;
-    color:#888;
-}
-
-</style>
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>🤝 PW Care</h1>
-    <p>Fitness For Everyone</p>
-</header>
-
-<section class="hero">
-    <h2>Support. Donate. Empower.</h2>
-    <p>
-        PW Care connects donors with people who need support.
-        Donate sports equipment, fitness accessories, or financial
-        assistance and help someone achieve a healthier life.
-    </p>
-</section>
-
-<section class="features">
-
-    <div class="card">
-        <div class="icon">♿</div>
-        <h3>Accessibility Support</h3>
-        <p>Special support for physically challenged users.</p>
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
     </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-    <div class="card">
-        <div class="icon">❤️</div>
-        <h3>Donate Money</h3>
-        <p>Support people who need financial help.</p>
+  <section class="page-hero">
+    <span class="section-tag reveal">Community</span>
+    <h1 class="reveal">🤝 PW <span class="gradient-text">Care</span></h1>
+    <p class="reveal">PW Care connects donors with people who need support. Donate sports equipment, fitness accessories, or financial assistance to help someone achieve a healthier life.</p>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      
+      <div class="features-grid">
+        <div class="f-card reveal reveal-delay-1">
+          <div class="icon">♿</div>
+          <h3>Accessibility Support</h3>
+          <p>Special support for physically challenged users.</p>
+        </div>
+        <div class="f-card reveal reveal-delay-2">
+          <div class="icon">❤️</div>
+          <h3>Donate Money</h3>
+          <p>Support people who need financial help for training.</p>
+        </div>
+        <div class="f-card reveal reveal-delay-3">
+          <div class="icon">🏏</div>
+          <h3>Donate Equipment</h3>
+          <p>Donate sports kits, shoes, bats and fitness tools.</p>
+        </div>
+        <div class="f-card reveal reveal-delay-4">
+          <div class="icon">🎯</div>
+          <h3>Request Help</h3>
+          <p>People can request fitness and sports support directly.</p>
+        </div>
+        <div class="f-card reveal reveal-delay-1">
+          <div class="icon">🏆</div>
+          <h3>Reward Donors</h3>
+          <p>Earn badges and recognition for helping others in the app.</p>
+        </div>
+        <div class="f-card reveal reveal-delay-2">
+          <div class="icon">🌍</div>
+          <h3>Community Impact</h3>
+          <p>Track how your donations are changing lives.</p>
+        </div>
+      </div>
+
+      <div class="donate-container reveal">
+        <div class="donate-header">
+          <h2>Donate or Request Help</h2>
+          <p style="color:var(--text-muted); font-size:14px;">Fill out the form below and our community team will connect with you.</p>
+        </div>
+        
+        <form id="careForm" onsubmit="event.preventDefault(); submitForm();">
+          <div class="form-grid">
+            <input type="text" class="form-input" placeholder="Full Name" required>
+            <input type="tel" class="form-input" placeholder="Phone Number" required>
+            <input type="email" class="form-input full-width" placeholder="Email Address" required>
+            <input type="text" class="form-input full-width" placeholder="Address" required>
+            <select class="form-input full-width" required style="color:var(--text-primary);">
+              <option value="" disabled selected>I want to...</option>
+              <option value="donate_eq">Donate Equipment</option>
+              <option value="donate_money">Donate Money</option>
+              <option value="request_help">Request Help</option>
+            </select>
+            <textarea class="form-input full-width" placeholder="What are you offering or requesting? Add any helpful details..." required></textarea>
+            
+            <button type="submit" class="btn btn-primary full-width" style="justify-content:center; padding:16px;">
+              Submit Request
+            </button>
+          </div>
+        </form>
+      </div>
+
     </div>
+  </section>
 
-    <div class="card">
-        <div class="icon">🏏</div>
-        <h3>Donate Equipment</h3>
-        <p>Donate sports kits, shoes, bats and fitness tools.</p>
+  <div style="text-align:center; padding-bottom:60px;">
+    <a href="home.html" class="btn btn-ghost">← Back To Home</a>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-bottom" style="border:none;padding:0;">
+      <span>© 2026 SportFit | PW Care Community Support</span>
     </div>
+  </footer>
 
-    <div class="card">
-        <div class="icon">🎯</div>
-        <h3>Request Help</h3>
-        <p>People can request fitness and sports support.</p>
-    </div>
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp, showToast } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+    window.showToast = showToast;
+  </script>
 
-    <div class="card">
-        <div class="icon">🏆</div>
-        <h3>Reward Donors</h3>
-        <p>Earn badges and recognition for helping others.</p>
-    </div>
-
-    <div class="card">
-        <div class="icon">🌍</div>
-        <h3>Community Impact</h3>
-        <p>Track how your donations are changing lives.</p>
-    </div>
-
-</section>
-
-<section class="donate-section">
-
-    <h2>Donate or Request Help</h2>
-
-    <form>
-        <input type="text" placeholder="Full Name">
-
-        <input type="Number" placeholder="Phone Number">
-
-        <input type="Address" placeholder="Address">
-
-        <input type="email" placeholder="Email Address">
-
-        <input type="text" placeholder="Donation Item / Requirement">
-
-        <textarea rows="5" placeholder="Write your message"></textarea>
-
-        <button type="submit">Submit</button>
-    </form>
-
-</section>
-
-<footer>
-    © 2026 PW Care | FitQuest AI Community Support
-</footer>
-
+  <script>
+    window.submitForm = function() {
+        if(window.showToast) window.showToast('Your request has been submitted! Our team will contact you soon.', 'success');
+        document.getElementById('careForm').reset();
+    }
+  </script>
 </body>
 </html>

@@ -1,142 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Tracker — SportFit</title>
+  <meta name="description" content="Track your daily workouts, water intake, and calories burned.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
+
+    .page-hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(2,12,27,0.85), rgba(2,12,27,0.92)),
+        url("https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1400&q=80");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .page-hero h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 16px; }
+    .page-hero p { color: var(--text-muted); font-size: 17px; }
+
+    .content-section { padding: 60px 0 80px; }
+
+    .tracker-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .tracker-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .tracker-header h2 {
+      font-size: 28px;
+      color: var(--blue-light);
+      margin-bottom: 8px;
+    }
+    .tracker-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: var(--trans-fast);
+    }
+
+    .form-input:focus {
+      border-color: var(--blue-primary);
+      outline: none;
+    }
+
+    .result-box {
+      margin-top: 30px;
+      padding: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      display: none;
+      text-align: center;
+    }
+
+    .result-box.show {
+      display: block;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .result-box h3 {
+      font-size: 22px;
+      color: var(--green-accent);
+      margin-bottom: 16px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-card);
+      font-size: 15px;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      color: var(--text-muted);
+    }
+
+    .result-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .motivation-text {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--blue-light);
+    }
+
+    .back-section { text-align: center; padding: 40px 0 80px; }
+
+  </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Progress Tracker</title>
 
-<style>
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span><small class="logo-tag">STRONGER EVERYDAY</small></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html" class="active">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
+      <div id="nav-user-menu" style="display:none; align-items:center; gap:10px;">
+        <div class="user-avatar" id="nav-avatar">A</div>
+        <span style="font-size:13px; color:var(--text-muted);" id="nav-user-label">Athlete</span>
+      </div>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-body{
-    font-family:Arial,sans-serif;
-    background:#031225;
-    color:white;
-    text-align:center;
-    margin:0;
-}
+  <section class="page-hero">
+    <span class="section-tag reveal">Progress Dashboard</span>
+    <h1 class="reveal">📊 Track Your <span class="gradient-text">Journey</span></h1>
+    <p class="reveal">Log your daily activities and see how far you've come.</p>
+  </section>
 
-.container{
-    width:80%;
-    max-width:600px;
-    margin:40px auto;
-    background:#071a30;
-    padding:30px;
-    border-radius:12px;
-}
+  <section class="content-section">
+    <div class="container">
+      <div class="tracker-container reveal">
+        <div class="tracker-header">
+          <h2>Daily Log</h2>
+          <p>Record your stats for today</p>
+        </div>
 
-h1{
-    color:#0d6efd;
-}
+        <form id="progressForm" onsubmit="event.preventDefault(); showProgress();">
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name</label>
+            <input type="text" id="name" class="form-input" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="workout">Workout Duration</label>
+            <input type="number" id="workout" class="form-input" placeholder="Minutes (e.g. 45)" required min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="water">Water Intake</label>
+            <input type="number" id="water" class="form-input" placeholder="Litres (e.g. 2.5)" required step="0.1" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="calories">Calories Burned</label>
+            <input type="number" id="calories" class="form-input" placeholder="kcal (e.g. 350)" required min="0">
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+            Save Progress
+          </button>
+        </form>
 
-input{
-    width:90%;
-    padding:12px;
-    margin:10px 0;
-    border:none;
-    border-radius:6px;
-}
+        <div id="resultBox" class="result-box">
+          <h3>🎉 Today's Progress</h3>
+          <div class="result-item">
+            <span class="result-label">Name</span>
+            <span class="result-value" id="resName"></span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Workout</span>
+            <span class="result-value"><span id="resWorkout"></span> Minutes</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Water Intake</span>
+            <span class="result-value"><span id="resWater"></span> Litres</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Calories Burned</span>
+            <span class="result-value"><span id="resCalories"></span> kcal</span>
+          </div>
+          <div class="motivation-text">Keep Going! You're doing great 💪</div>
+        </div>
 
-button{
-    background:#0d6efd;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:6px;
-    cursor:pointer;
-}
+      </div>
+    </div>
+  </section>
 
-button:hover{
-    background:#0056d2;
-}
+  <div class="back-section">
+    <a href="home.html" class="btn btn-outline btn-lg">← Back To Home</a>
+  </div>
 
-.result{
-    margin-top:20px;
-    padding:20px;
-    background:#02101f;
-    border-radius:10px;
-}
+  <footer class="footer">
+    <div class="footer-bottom" style="border:none;padding:0;">
+      <span>© 2026 SportFit | Progress Tracker</span>
+    </div>
+  </footer>
 
-.back{
-    display:inline-block;
-    margin-top:20px;
-    color:white;
-    text-decoration:none;
-    background:#0d6efd;
-    padding:10px 20px;
-    border-radius:6px;
-}
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+  </script>
 
-</style>
-</head>
+  <script>
+    function showProgress() {
+      const name = document.getElementById("name").value;
+      const workout = document.getElementById("workout").value;
+      const water = document.getElementById("water").value;
+      const calories = document.getElementById("calories").value;
 
-<body>
+      document.getElementById("resName").textContent = name;
+      document.getElementById("resWorkout").textContent = workout;
+      document.getElementById("resWater").textContent = water;
+      document.getElementById("resCalories").textContent = calories;
 
-<div class="container">
-
-<h1>📊 Daily Progress Tracker</h1>
-
-<input type="text" id="name" placeholder="Enter Your Name">
-
-<input type="number" id="workout" placeholder="Workout Minutes">
-
-<input type="number" id="water" placeholder="Water Intake (Litres)">
-
-<input type="number" id="calories" placeholder="Calories Burned">
-
-<br>
-
-<button onclick="showProgress()">
-Save Progress
-</button>
-
-<div id="result" class="result"></div>
-
-<a href="home.html" class="back">
-← Back Home
-</a>
-
-</div>
-
-<script>
-
-function showProgress(){
-
-let name=document.getElementById("name").value;
-let workout=document.getElementById("workout").value;
-let water=document.getElementById("water").value;
-let calories=document.getElementById("calories").value;
-
-document.getElementById("result").innerHTML=`
-
-<h2>🎉 Today's Progress</h2>
-
-<p><b>Name:</b> ${name}</p>
-
-<p><b>Workout:</b> ${workout} Minutes</p>
-
-<p><b>Water Intake:</b> ${water} Litres</p>
-
-<p><b>Calories Burned:</b> ${calories}</p>
-
-<p style="color:#29ff78;">
-Keep Going! You're doing great 💪
-</p>
-
-`;
-
-}
-
-</script>
-
-</body>
-</html>
+      const resultBox = document.getElementById("resultBox");
+      resultBox.classList.add("show");
+      
+      // Clear form
+      document.getElementById("progressForm").reset();
+    }
+  </script>
 </body>
 </html>

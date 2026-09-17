@@ -1,228 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR Campus Quests</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Campus Quests — SportFit</title>
+  <meta name="description" content="Gamified fitness missions with XP system, badges and campus-based challenges.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
 
-<style>
+    .page-hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+    }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+    .page-hero h1 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 12px; }
+    .page-hero p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto; }
 
-body{
-background:#031225;
-color:white;
-padding:20px;
-}
+    .content-section { padding: 40px 0 80px; }
 
-.container{
-max-width:1000px;
-margin:auto;
-}
+    .quest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
-h1{
-text-align:center;
-color:#0d6efd;
-margin-bottom:20px;
-}
+    .q-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
 
-.card{
-background:#071a30;
-padding:20px;
-margin:20px 0;
-border-radius:12px;
-border:1px solid #234;
-}
+    .q-card h2 {
+      font-size: 20px;
+      color: var(--blue-light);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.card h2{
-color:#29ff78;
-margin-bottom:10px;
-}
+    .mission-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-button{
-background:#0d6efd;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
-}
+    .mission-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-primary);
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-sm);
+    }
 
-button:hover{
-background:#0056d6;
-}
+    .mission-item .icon { font-size: 20px; }
 
-.progress{
-width:100%;
-height:25px;
-background:#1a2a40;
-border-radius:20px;
-overflow:hidden;
-margin-top:15px;
-}
+    .progress-container {
+      width: 100%;
+      height: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 16px 0;
+      border: 1px solid var(--border-card);
+    }
 
-.bar{
-height:100%;
-width:0%;
-background:#29ff78;
-transition:.5s;
-}
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--green-accent);
+      transition: width 0.5s ease;
+    }
 
-.reward{
-font-size:22px;
-color:gold;
-margin-top:10px;
-}
+    #xpText {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 18px;
+    }
 
-.badge{
-display:inline-block;
-padding:10px 15px;
-background:#29ff78;
-color:black;
-border-radius:20px;
-margin:5px;
-font-weight:bold;
-}
+    .location-box {
+      padding: 24px;
+      text-align: center;
+      background: rgba(13,110,253,0.1);
+      border: 1px dashed var(--blue-primary);
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      color: var(--blue-light);
+      font-weight: 500;
+    }
 
-</style>
+    .badge-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(41,255,120,0.1);
+      color: var(--green-accent);
+      border: 1px solid rgba(41,255,120,0.3);
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 14px;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+  </style>
 </head>
 <body>
 
-<div class="container">
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-<h1>🎮 AR Campus Quests</h1>
+  <section class="page-hero">
+    <span class="section-tag reveal">Gamification</span>
+    <h1 class="reveal">AR Campus <span class="gradient-text">Quests</span></h1>
+    <p class="reveal">Complete challenges around your campus, earn XP, and unlock rewards.</p>
+  </section>
 
-<div class="card">
-<h2>📋 Daily Missions</h2>
+  <section class="content-section">
+    <div class="container">
+      <div class="quest-grid">
+        
+        <!-- Daily Missions -->
+        <div class="q-card reveal reveal-delay-1">
+          <h2>📋 Daily Missions</h2>
+          <ul class="mission-list">
+            <li class="mission-item"><span class="icon">🚶</span> Walk 1000 Steps</li>
+            <li class="mission-item"><span class="icon">💧</span> Drink 8 Glasses of Water</li>
+            <li class="mission-item"><span class="icon">🏋️</span> Complete 1 Workout</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="completeMission()">
+            Complete Random Mission
+          </button>
+        </div>
 
-<p>1. Walk 1000 Steps</p>
-<p>2. Drink 8 Glasses Water</p>
-<p>3. Complete Workout</p>
+        <!-- Location Challenge -->
+        <div class="q-card reveal reveal-delay-2">
+          <h2>📍 Location Challenge</h2>
+          <div class="location-box" id="locationText">
+            Click below to discover a new campus challenge location
+          </div>
+          <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="generateLocation()">
+            Find Challenge
+          </button>
+        </div>
 
-<button onclick="completeMission()">
-Complete Mission
-</button>
+        <!-- XP Progress -->
+        <div class="q-card reveal reveal-delay-3">
+          <h2>⭐ XP Progress</h2>
+          <div id="xpText">XP : 0 / 100</div>
+          <div class="progress-container">
+            <div class="progress-bar" id="xpBar"></div>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Reach 100 XP to level up and unlock badges!</p>
+        </div>
 
-</div>
+        <!-- Rewards & Achievements -->
+        <div class="q-card reveal reveal-delay-4">
+          <h2>🏆 Rewards & Achievements</h2>
+          <div id="rewardArea" style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">
+            No rewards yet. Keep completing missions!
+          </div>
+          <div class="badge-area" id="badges">
+            <!-- Badges appear here -->
+          </div>
+        </div>
 
-<div class="card">
-<h2>📍 Location Challenge</h2>
+      </div>
+    </div>
+  </section>
 
-<p id="locationText">
-Click below to discover challenge location
-</p>
+  <div style="text-align:center; padding-bottom:60px;">
+    <a href="home.html" class="btn btn-ghost">← Back To Home</a>
+  </div>
 
-<button onclick="generateLocation()">
-Find Challenge
-</button>
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp, showToast } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+    window.showToast = showToast;
+  </script>
 
-</div>
+  <script>
+    let xp = 0;
+    let leveledUp = false;
+    let rewardGiven = false;
 
-<div class="card">
+    window.completeMission = function() {
+        if(xp >= 100) return;
+        
+        xp += 25;
+        if(xp > 100) xp = 100;
 
-<h2>⭐ XP Progress</h2>
+        document.getElementById("xpText").innerHTML = "XP : " + xp + " / 100";
+        document.getElementById("xpBar").style.width = xp + "%";
+        
+        if(window.showToast) window.showToast(`+25 XP Earned! ⭐`, 'success');
 
-<h3 id="xpText">
-XP : 0 / 100
-</h3>
+        if(xp >= 50 && !rewardGiven) {
+            document.getElementById("rewardArea").innerHTML = "🎁 Free Fitness Badge Unlocked!";
+            document.getElementById("rewardArea").style.color = "var(--green-accent)";
+            document.getElementById("rewardArea").style.fontWeight = "600";
+            rewardGiven = true;
+        }
 
-<div class="progress">
-<div class="bar" id="xpBar"></div>
-</div>
+        if(xp >= 100 && !leveledUp) {
+            document.getElementById("badges").innerHTML = 
+                "<span class='badge'>🏅 Explorer</span>" +
+                "<span class='badge'>⭐ Fitness Hero</span>";
+            
+            setTimeout(() => {
+                alert("🏆 Level Completed! You are now a Campus Explorer.");
+            }, 500);
+            leveledUp = true;
+        }
+    }
 
-</div>
-
-<div class="card">
-
-<h2>🏆 Rewards</h2>
-
-<div id="rewardArea">
-No Rewards Yet
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>🎖 Achievements</h2>
-
-<div id="badges">
-No Badges Earned
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-let xp=0;
-
-function completeMission(){
-
-xp += 25;
-
-if(xp > 100){
-xp = 100;
-}
-
-document.getElementById("xpText")
-.innerHTML = "XP : " + xp + " / 100";
-
-document.getElementById("xpBar")
-.style.width = xp + "%";
-
-if(xp >= 50){
-
-document.getElementById("rewardArea")
-.innerHTML =
-"<div class='reward'>🎁 Free Fitness Badge Unlocked</div>";
-
-}
-
-if(xp >= 100){
-
-document.getElementById("badges")
-.innerHTML =
-"<span class='badge'>Explorer</span>" +
-"<span class='badge'>Fitness Hero</span>";
-
-alert("🏆 Level Completed!");
-}
-
-}
-
-function generateLocation(){
-
-let locations = [
-
-"🏃 Sports Ground Challenge",
-"🏫 Library Walk Quest",
-"🌳 Campus Garden Challenge",
-"🚶 Hostel To Canteen Walk",
-"🏀 Basketball Court Quest"
-
-];
-
-let randomLocation =
-locations[
-Math.floor(
-Math.random()*locations.length
-)
-];
-
-document.getElementById("locationText")
-.innerHTML = randomLocation;
-
-}
-
-</script>
-
+    window.generateLocation = function() {
+        let locations = [
+            "🏃 Sports Ground: Do 2 laps",
+            "🏫 Library Walk: Take the stairs",
+            "🌳 Campus Garden: 10 minute brisk walk",
+            "🚶 Hostel To Canteen Walk (Speed run)",
+            "🏀 Basketball Court: 10 free throws"
+        ];
+        
+        let randomLocation = locations[Math.floor(Math.random() * locations.length)];
+        
+        const locBox = document.getElementById("locationText");
+        locBox.style.animation = "none";
+        locBox.offsetHeight; /* trigger reflow */
+        locBox.style.animation = "popIn 0.3s ease-out";
+        locBox.innerHTML = randomLocation;
+    }
+  </script>
 </body>
 </html>
