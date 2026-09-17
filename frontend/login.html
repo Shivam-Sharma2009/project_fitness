@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — SportFit</title>
+  <meta name="description" content="Sign in to SportFit — your AI-powered fitness platform.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    .auth-bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 20% 40%, rgba(26,111,255,0.12), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 60%, rgba(124,58,237,0.1), transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 0%, rgba(0,245,147,0.06), transparent 60%);
+      z-index: 0;
+    }
+
+    #auth-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    .auth-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Left side — brand panel */
+    .auth-brand {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      background: linear-gradient(135deg, rgba(26,111,255,0.08), rgba(124,58,237,0.06));
+      border-right: 1px solid var(--border-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-brand::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80")
+        center/cover no-repeat;
+      opacity: 0.06;
+    }
+
+    .auth-brand-inner { position: relative; }
+
+    .auth-logo {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 48px;
+    }
+
+    .auth-logo span { color: var(--blue-primary); }
+
+    .auth-brand h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .auth-brand p {
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 400px;
+    }
+
+    .auth-features {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .auth-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: rgba(26,111,255,0.12);
+      border: 1px solid rgba(26,111,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Right side — form */
+    .auth-form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-card-header {
+      margin-bottom: 32px;
+    }
+
+    .auth-card-header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .auth-card-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .auth-card-header p a {
+      color: var(--blue-light);
+      font-weight: 600;
+    }
+
+    .form-error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: var(--radius-sm);
+      color: #f87171;
+      font-size: 13px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .form-error.show { display: block; }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap .form-input { padding-right: 44px; }
+
+    .toggle-pass {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-pass:hover { color: var(--text-primary); }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      transition: var(--trans-fast);
+    }
+
+    .forgot-link:hover { color: var(--blue-light); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      justify-content: center;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .btn-submit .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    @media (max-width: 900px) {
+      .auth-grid { grid-template-columns: 1fr; }
+      .auth-brand { display: none; }
+      .auth-form-panel { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <div id="auth-particles"></div>
+
+  <div class="auth-grid">
+    <!-- ── Brand Panel ── -->
+    <div class="auth-brand">
+      <div class="auth-brand-inner">
+        <div class="auth-logo">🏃 SPORT<span>FIT</span></div>
+        <h2>
+          Welcome<br>
+          Back, <span class="gradient-text">Athlete</span> 💪
+        </h2>
+        <p>
+          Sign in to access your personalized fitness dashboard,
+          track progress, unlock AI features and continue your
+          journey to a stronger you.
+        </p>
+        <div class="auth-features">
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">🤖</div>
+            AI Form Guard & Voice Coach
+          </div>
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">📊</div>
+            Personal Progress Dashboard
+          </div>
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">♿</div>
+            Accessibility AI Assistant
+          </div>
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">🎮</div>
+            AR Campus Quests & Leaderboard
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Form Panel ── -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <div class="auth-card-header">
+          <h1>Sign In</h1>
+          <p>Don't have an account? <a href="register.html">Create one free →</a></p>
+        </div>
+
+        <!-- Google Sign-In -->
+        <button class="btn-google" id="google-btn" type="button">
+          <svg class="google-logo" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div class="divider"><span>or sign in with email</span></div>
+
+        <!-- Error message -->
+        <div class="form-error" id="login-error"></div>
+
+        <!-- Login Form -->
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-wrap">
+              <input class="form-input" type="password" id="password" placeholder="Enter your password" required minlength="6" autocomplete="current-password">
+              <button type="button" class="toggle-pass" id="toggle-pass" aria-label="Toggle password">👁</button>
+            </div>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-submit" id="login-btn">
+            <div class="spinner"></div>
+            <span class="btn-text">Sign In →</span>
+          </button>
+        </form>
+
+        <p style="text-align:center;margin-top:24px;font-size:12px;color:var(--text-dim);">
+          By signing in, you agree to our Terms of Service and Privacy Policy.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initParticles } from './js/app.js';
+    import { signInWithGoogle, loginWithEmail, onAuthChange } from './js/auth.js';
+
+    initParticles('auth-particles');
+
+    // Redirect if already logged in
+    onAuthChange(user => {
+      if (user) window.location.href = 'home.html';
+    });
+
+    // Toggle password visibility
+    const passInput = document.getElementById('password');
+    const toggleBtn = document.getElementById('toggle-pass');
+    toggleBtn.addEventListener('click', () => {
+      const isPass = passInput.type === 'password';
+      passInput.type = isPass ? 'text' : 'password';
+      toggleBtn.textContent = isPass ? '🙈' : '👁';
+    });
+
+    // Show error helper
+    function showError(msg) {
+      const el = document.getElementById('login-error');
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+
+    function clearError() {
+      document.getElementById('login-error').classList.remove('show');
+    }
+
+    // Google Sign-In
+    document.getElementById('google-btn').addEventListener('click', async () => {
+      clearError();
+      const result = await signInWithGoogle();
+      if (result.success) {
+        window.location.href = 'home.html';
+      } else {
+        showError(result.error);
+      }
+    });
+
+    // Email/Password Login
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+      const btn = document.getElementById('login-btn');
+      btn.classList.add('loading');
+
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const result = await loginWithEmail(email, password);
+      btn.classList.remove('loading');
+
+      if (result.success) {
+        window.location.href = 'home.html';
+      } else {
+        showError(result.error);
+      }
+    });
+  </script>
+</body>
+</html>
