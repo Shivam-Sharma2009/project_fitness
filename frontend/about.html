@@ -1,270 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — SportFit</title>
+  <meta name="description" content="Learn about SportFit — your AI-powered fitness platform for SIH 2026.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
+
+    /* Hero */
+    .about-hero {
+      text-align: center;
+      padding: 100px 20px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 30%, rgba(26,111,255,0.12), transparent 60%),
+        radial-gradient(ellipse 40% 40% at 70% 80%, rgba(0,245,147,0.08), transparent 50%);
+    }
+
+    .about-hero > * { position: relative; z-index: 1; }
+
+    .about-hero h1 {
+      font-size: clamp(38px, 5vw, 60px);
+      margin-bottom: 20px;
+    }
+
+    .about-hero p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-muted);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    /* Section styling */
+    .about-section {
+      padding: 80px 0;
+    }
+
+    .about-section:nth-child(even) {
+      background: linear-gradient(180deg, transparent, rgba(26,111,255,0.03) 50%, transparent);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--trans-mid);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad-blue);
+      transform: scaleX(0);
+      transition: var(--trans-mid);
+    }
+
+    .about-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(26,111,255,0.3);
+      box-shadow: var(--shadow-hover), var(--shadow-blue);
+    }
+
+    .about-card:hover::before { transform: scaleX(1); }
+
+    .about-card-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+
+    .about-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--green-accent);
+    }
+
+    .about-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Quote */
+    .quote-banner {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(0,245,147,0.06), rgba(26,111,255,0.06));
+      border-top: 1px solid var(--border-card);
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .quote-banner blockquote {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .quote-banner blockquote span { color: var(--green-accent); }
+
+    /* SIH Info */
+    .sih-info {
+      padding: 80px 0;
+    }
+
+    .sih-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      box-shadow: var(--shadow-card);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .sih-card h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .sih-card p {
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .sih-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sih-detail-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .sih-detail-label {
+      color: var(--text-dim);
+      min-width: 120px;
+    }
+
+    .sih-detail-value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Back button area */
+    .back-section {
+      text-align: center;
+      padding: 40px 0 80px;
+    }
+
+    @media (max-width: 768px) {
+      .sih-card { grid-template-columns: 1fr; padding: 32px; }
+    }
+  </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About SportFit</title>
 
-<style>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo">
+      <span>🏃 SPORT<span class="logo-accent">FIT</span></span>
+      <small class="logo-tag">STRONGER EVERYDAY</small>
+    </a>
+    <ul class="nav-links">
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#031225;
-    color:white;
-}
-
-header{
-    background:#02101f;
-    padding:25px;
-    text-align:center;
-}
-
-header h1{
-    color:#0d6efd;
-}
-
-.hero{
-    text-align:center;
-    padding:70px 20px;
-}
-
-.hero h2{
-    font-size:45px;
-    color:#29ff78;
-    margin-bottom:15px;
-}
-
-.hero p{
-    max-width:800px;
-    margin:auto;
-    color:#ddd;
-    line-height:1.8;
-}
-
-.container{
-    width:90%;
-    margin:auto;
-    padding:30px 0;
-}
-
-.section-title{
-    text-align:center;
-    margin:40px 0 20px;
-    color:#0d6efd;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:#071a30;
-    padding:25px;
-    border-radius:12px;
-    border:1px solid #234;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-8px);
-    border-color:#0d6efd;
-}
-
-.card h3{
-    color:#29ff78;
-    margin-bottom:10px;
-}
-
-.card p{
-    color:#ddd;
-    line-height:1.6;
-}
-
-.quote{
-    text-align:center;
-    font-size:24px;
-    color:#29ff78;
-    margin:40px 0;
-}
-
-.back{
-    display:inline-block;
-    background:#0d6efd;
-    color:white;
-    text-decoration:none;
-    padding:12px 25px;
-    border-radius:8px;
-}
-
-footer{
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-    border-top:1px solid #234;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>🏃 About SportFit</h1>
-</header>
-
-<section class="hero">
-
-    <h2>Welcome To SportFit</h2>
-
-    <p>
-        SportFit is a complete Sports, Fitness, Workout and Nutrition
-        platform designed to help people live a healthier and more active life.
-        Our goal is to provide workout guidance, fitness knowledge,
-        nutrition awareness and sports learning in one place.
+  <!-- HERO -->
+  <section class="about-hero">
+    <span class="section-tag reveal">About SportFit</span>
+    <h1 class="reveal">Welcome to <span class="gradient-text">SportFit</span> 🏃</h1>
+    <p class="reveal">
+      SportFit is a complete Sports, Fitness, Workout and Nutrition platform
+      designed to help people live a healthier and more active life.
+      Our goal is to provide workout guidance, fitness knowledge,
+      nutrition awareness and sports learning — all in one place, powered by AI.
     </p>
+  </section>
 
-</section>
-
-<div class="container">
-
-    <h2 class="section-title">🎯 What We Provide</h2>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>🏏 Sports Training</h3>
-            <p>
-                Learn sports techniques, improve skills and discover
-                training tips for different games.
-            </p>
+  <!-- WHAT WE PROVIDE -->
+  <section class="about-section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <span class="section-tag">What We Provide</span>
+        <h2 class="section-title">Everything You Need to <span class="gradient-text">Stay Fit</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card reveal reveal-delay-1">
+          <div class="about-card-icon">🏏</div>
+          <h3>Sports Training</h3>
+          <p>Learn sports techniques, improve skills and discover training tips for Cricket, Football, Basketball, Badminton, Tennis and Athletics.</p>
         </div>
-
-        <div class="card">
-            <h3>💪 Fitness Programs</h3>
-            <p>
-                Follow fitness plans for beginners, intermediate
-                and advanced users.
-            </p>
+        <div class="about-card reveal reveal-delay-2">
+          <div class="about-card-icon">💪</div>
+          <h3>Fitness Programs</h3>
+          <p>Follow fitness plans for beginners, intermediate and advanced users. Cardio, Strength, Yoga and fat-loss programs.</p>
         </div>
-
-        <div class="card">
-            <h3>🏋️ Workout Library</h3>
-            <p>
-                Explore cardio, strength training, yoga and home workouts
-                with detailed explanations.
-            </p>
+        <div class="about-card reveal reveal-delay-3">
+          <div class="about-card-icon">🏋️</div>
+          <h3>Workout Library</h3>
+          <p>Explore 100+ workouts — cardio, strength training, yoga, HIIT and home workouts with detailed explanations.</p>
         </div>
-
-        <div class="card">
-            <h3>🥗 Nutrition Guide</h3>
-            <p>
-                Understand healthy eating, meal plans and essential nutrients.
-            </p>
+        <div class="about-card reveal reveal-delay-4">
+          <div class="about-card-icon">🥗</div>
+          <h3>Nutrition Guide</h3>
+          <p>Understand healthy eating with meal plans, calorie counters, water trackers and essential nutrient guides.</p>
         </div>
-
+      </div>
     </div>
+  </section>
 
-    <h2 class="section-title">⭐ Advantages of SportFit</h2>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>❤️ Better Health</h3>
-            <p>
-                Improve physical and mental health through regular exercise.
-            </p>
+  <!-- ADVANTAGES -->
+  <section class="about-section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <span class="section-tag">Why SportFit?</span>
+        <h2 class="section-title">Advantages of <span class="gradient-text-green">SportFit</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card reveal reveal-delay-1">
+          <div class="about-card-icon">❤️</div>
+          <h3>Better Health</h3>
+          <p>Improve physical and mental health through regular exercise and smart tracking.</p>
         </div>
-
-        <div class="card">
-            <h3>⚡ Increased Energy</h3>
-            <p>
-                Healthy habits help boost energy levels and productivity.
-            </p>
+        <div class="about-card reveal reveal-delay-2">
+          <div class="about-card-icon">⚡</div>
+          <h3>Increased Energy</h3>
+          <p>Healthy habits help boost energy levels, productivity and overall wellbeing.</p>
         </div>
-
-        <div class="card">
-            <h3>🧠 Improved Focus</h3>
-            <p>
-                Fitness activities improve concentration and reduce stress.
-            </p>
+        <div class="about-card reveal reveal-delay-3">
+          <div class="about-card-icon">🧠</div>
+          <h3>Improved Focus</h3>
+          <p>Fitness activities improve concentration, reduce stress and sharpen mental clarity.</p>
         </div>
-
-        <div class="card">
-            <h3>🏆 Goal Achievement</h3>
-            <p>
-                Stay motivated and track progress toward your fitness goals.
-            </p>
+        <div class="about-card reveal reveal-delay-4">
+          <div class="about-card-icon">🏆</div>
+          <h3>Goal Achievement</h3>
+          <p>Stay motivated with progress tracking, streaks and personalized goal dashboards.</p>
         </div>
-
+      </div>
     </div>
+  </section>
 
-    <h2 class="section-title">🚀 Unique Features</h2>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>💡 Daily Fitness Tips</h3>
-            <p>
-                Get useful health and workout tips every day.
-            </p>
+  <!-- UNIQUE FEATURES -->
+  <section class="about-section">
+    <div class="container">
+      <div style="text-align:center;" class="reveal">
+        <span class="section-tag">AI-Powered</span>
+        <h2 class="section-title">Unique <span class="gradient-text">Features</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card reveal reveal-delay-1">
+          <div class="about-card-icon">♿</div>
+          <h3>Accessibility AI</h3>
+          <p>Voice-first assistant for visually impaired, hearing-impaired and mobility-challenged users — powered by Claude AI.</p>
         </div>
-
-        <div class="card">
-            <h3>📊 Progress Tracking</h3>
-            <p>
-                Track your workout consistency and achievements.
-            </p>
+        <div class="about-card reveal reveal-delay-2">
+          <div class="about-card-icon">📷</div>
+          <h3>AI Form Guard</h3>
+          <p>Real-time posture detection and automatic rep counting using camera + TensorFlow.js.</p>
         </div>
-
-        <div class="card">
-            <h3>🔥 Workout Recommendations</h3>
-            <p>
-                Discover suitable workouts based on your goals.
-            </p>
+        <div class="about-card reveal reveal-delay-3">
+          <div class="about-card-icon">😴</div>
+          <h3>Fatigue Detection</h3>
+          <p>Smart energy monitoring with voice alerts and rest recommendations during workouts.</p>
         </div>
-
-        <div class="card">
-            <h3>🥇 Fitness Challenges</h3>
-            <p>
-                Participate in weekly fitness challenges and stay motivated.
-            </p>
+        <div class="about-card reveal reveal-delay-4">
+          <div class="about-card-icon">🎮</div>
+          <h3>AR Campus Quests</h3>
+          <p>Gamified fitness missions with XP system, badges and campus-based challenges.</p>
         </div>
-
+      </div>
     </div>
+  </section>
 
-    <div class="quote">
-        "Your Health Is Your Greatest Wealth."
+  <!-- QUOTE -->
+  <section class="quote-banner reveal">
+    <blockquote>
+      "Your <span>Health</span> Is Your<br>Greatest <span>Wealth</span>."
+    </blockquote>
+  </section>
+
+  <!-- SIH INFO -->
+  <section class="sih-info">
+    <div class="container">
+      <div class="sih-card reveal">
+        <div>
+          <span class="section-tag">SIH 2026</span>
+          <h2>Built for <span class="gradient-text">Smart India Hackathon</span></h2>
+          <p>
+            SportFit is built as a solution for Problem Statement 26194 under the
+            Fitness & Sports theme. Our platform leverages AI to make fitness
+            accessible, personalized and engaging for everyone.
+          </p>
+          <a href="home.html" class="btn btn-primary">← Back to Home</a>
+        </div>
+        <div class="sih-details">
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">PS ID</span>
+            <span class="sih-detail-value badge badge-blue">26194</span>
+          </div>
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">Title</span>
+            <span class="sih-detail-value">Student Innovation</span>
+          </div>
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">Organization</span>
+            <span class="sih-detail-value">AICTE</span>
+          </div>
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">Department</span>
+            <span class="sih-detail-value">AICTE, MIC-Student Innovation</span>
+          </div>
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">Category</span>
+            <span class="sih-detail-value badge badge-green">Software</span>
+          </div>
+          <div class="sih-detail-row">
+            <span class="sih-detail-label">Theme</span>
+            <span class="sih-detail-value">Fitness & Sports</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <center>
-        <a href="index.html" class="back">
-            ← Back To Main Website
-        </a>
-    </center>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border:none;padding:0;">
+      <span>© 2026 SportFit | SIH PS-26194 | Train · Track · Transform</span>
+    </div>
+  </footer>
 
-</div>
-
-<footer>
-    © 2026 SportFit | Train • Transform • Thrive
-</footer>
-
-</body>
-</html>
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+  </script>
 </body>
 </html>

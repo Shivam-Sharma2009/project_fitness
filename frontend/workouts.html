@@ -1,267 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workouts</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Zone — SportFit</title>
+  <meta name="description" content="100+ curated workouts with duration, calories and difficulty ratings.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding-top: 72px; }
+
+    .page-hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(2,12,27,0.85), rgba(2,12,27,0.92)),
+        url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .page-hero h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 16px; }
+    .page-hero p { color: var(--text-muted); font-size: 17px; }
+
+    .content-section { padding: 60px 0 80px; }
+
+    .workout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .w-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--trans-mid);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .w-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad-blue);
+      transform: scaleX(0);
+      transition: var(--trans-mid);
+    }
+
+    .w-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(26,111,255,0.3);
+      box-shadow: var(--shadow-hover), var(--shadow-blue);
+    }
+
+    .w-card:hover::after { transform: scaleX(1); }
+
+    .w-card .icon { font-size: 36px; margin-bottom: 16px; }
+    .w-card h3 { font-size: 20px; color: var(--green-accent); margin-bottom: 12px; }
+    .w-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+
+    .w-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .w-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-card);
+      color: var(--text-muted);
+    }
+
+    /* Tips */
+    .tips-box {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      margin-top: 48px;
+    }
+
+    .tips-box h2 { font-size: 22px; color: var(--green-accent); margin-bottom: 20px; }
+
+    .tips-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .tip-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-muted);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+    }
+
+    .quote-section {
+      text-align: center;
+      padding: 48px 20px;
+      font-family: var(--font-heading);
+      font-size: clamp(18px, 2.5vw, 28px);
+      color: var(--blue-light);
+      font-weight: 600;
+    }
+
+    .back-section { text-align: center; padding: 0 0 80px; }
+  </style>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workout Zone</title>
 
-<style>
+  <nav class="navbar">
+    <a href="home.html" class="nav-logo"><span>🏃 SPORT<span class="logo-accent">FIT</span></span><small class="logo-tag">STRONGER EVERYDAY</small></a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="sports.html">Sports</a></li>
+      <li><a href="fitness.html">Fitness</a></li>
+      <li><a href="workouts.html" class="active">Workouts</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="progress.html">Progress</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+  <section class="page-hero">
+    <span class="section-tag reveal">Workout Zone</span>
+    <h1 class="reveal">🏋️ Train Hard, <span class="gradient-text">Stay Strong</span></h1>
+    <p class="reveal">Choose the right workout and achieve your fitness goals.</p>
+  </section>
 
-body{
-background:#031225;
-color:white;
-}
+  <section class="content-section">
+    <div class="container">
+      <div class="workout-grid">
+        <div class="w-card reveal reveal-delay-1">
+          <div class="icon">💪</div>
+          <h3>Full Body Workout</h3>
+          <p>Targets your entire body including chest, legs, arms and core. Perfect for beginners.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 30 min</span>
+            <span class="w-meta-item">🔥 250-350 kcal</span>
+            <span class="w-meta-item badge badge-green">Beginner</span>
+          </div>
+        </div>
+        <div class="w-card reveal reveal-delay-2">
+          <div class="icon">🏃</div>
+          <h3>Cardio Workout</h3>
+          <p>Improves heart health, stamina and helps in burning extra calories quickly.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 25 min</span>
+            <span class="w-meta-item">🔥 300-450 kcal</span>
+            <span class="w-meta-item badge badge-green">Easy</span>
+          </div>
+        </div>
+        <div class="w-card reveal reveal-delay-3">
+          <div class="icon">🏋️</div>
+          <h3>Strength Training</h3>
+          <p>Build muscle mass and increase body strength through resistance exercises.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 45 min</span>
+            <span class="w-meta-item">🔥 350-500 kcal</span>
+            <span class="w-meta-item badge badge-blue">Intermediate</span>
+          </div>
+        </div>
+        <div class="w-card reveal reveal-delay-4">
+          <div class="icon">🧘</div>
+          <h3>Yoga Workout</h3>
+          <p>Improves flexibility, balance and mental peace while reducing stress.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 30 min</span>
+            <span class="w-meta-item">🔥 150-250 kcal</span>
+            <span class="w-meta-item badge badge-green">Easy</span>
+          </div>
+        </div>
+        <div class="w-card reveal reveal-delay-1">
+          <div class="icon">🔥</div>
+          <h3>HIIT Workout</h3>
+          <p>High Intensity Interval Training for maximum fat burning in minimum time.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 20 min</span>
+            <span class="w-meta-item">🔥 400-600 kcal</span>
+            <span class="w-meta-item" style="background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.3);">Advanced</span>
+          </div>
+        </div>
+        <div class="w-card reveal reveal-delay-2">
+          <div class="icon">🏠</div>
+          <h3>Home Workout</h3>
+          <p>No gym equipment required. Perfect for daily fitness at home with bodyweight exercises.</p>
+          <div class="w-meta">
+            <span class="w-meta-item">⏱ 20 min</span>
+            <span class="w-meta-item">🔥 200-300 kcal</span>
+            <span class="w-meta-item badge badge-green">Beginner</span>
+          </div>
+        </div>
+      </div>
 
-header{
-background:#02101f;
-text-align:center;
-padding:25px;
-}
+      <div class="tips-box reveal">
+        <h2>💡 Workout Tips</h2>
+        <div class="tips-list">
+          <div class="tip-item">✅ Always warm up before starting</div>
+          <div class="tip-item">✅ Maintain correct posture</div>
+          <div class="tip-item">✅ Stay hydrated during workout</div>
+          <div class="tip-item">✅ Take proper rest between sets</div>
+          <div class="tip-item">✅ Cool down after workout</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-header h1{
-color:#0d6efd;
-}
+  <div class="quote-section reveal">"Success starts with self-discipline."</div>
+  <div class="back-section"><a href="home.html" class="btn btn-primary btn-lg">← Back To Home</a></div>
 
-.hero{
-text-align:center;
-padding:60px 20px;
-background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
-url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80");
-background-size:cover;
-background-position:center;
-}
+  <footer class="footer"><div class="footer-bottom" style="border:none;padding:0;"><span>© 2026 SportFit | Workout Zone</span></div></footer>
 
-.hero h2{
-font-size:45px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:18px;
-color:#ddd;
-}
-
-.container{
-width:90%;
-margin:auto;
-padding:50px 0;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:20px;
-}
-
-.card{
-background:#071a30;
-padding:25px;
-border-radius:12px;
-border:1px solid #234;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
-border-color:#0d6efd;
-}
-
-.card h3{
-color:#29ff78;
-margin-bottom:10px;
-}
-
-.info{
-margin-top:10px;
-color:#bfbfbf;
-font-size:14px;
-}
-
-.tip{
-margin-top:40px;
-background:#071a30;
-padding:25px;
-border-radius:12px;
-}
-
-.tip h2{
-color:#29ff78;
-margin-bottom:15px;
-}
-
-.quote{
-margin-top:30px;
-text-align:center;
-font-size:24px;
-color:#0d6efd;
-font-weight:bold;
-}
-
-.back{
-display:inline-block;
-margin-top:30px;
-background:#0d6efd;
-padding:12px 20px;
-border-radius:8px;
-color:white;
-text-decoration:none;
-}
-
-footer{
-text-align:center;
-padding:20px;
-border-top:1px solid #234;
-margin-top:40px;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>🏋️ WORKOUT ZONE</h1>
-</header>
-
-<section class="hero">
-<h2>Train Hard, Stay Strong</h2>
-<p>Choose the right workout and achieve your fitness goals.</p>
-</section>
-
-<div class="container">
-
-<div class="cards">
-
-<div class="card">
-<h3>💪 Full Body Workout</h3>
-<p>
-Targets your entire body including chest, legs,
-arms and core. Perfect for beginners.
-</p>
-
-<div class="info">
-⏱ Duration: 30 Minutes<br>
-🔥 Calories Burned: 250-350<br>
-⭐ Difficulty: Beginner
-</div>
-</div>
-
-<div class="card">
-<h3>🏃 Cardio Workout</h3>
-<p>
-Improves heart health, stamina and helps in
-burning extra calories quickly.
-</p>
-
-<div class="info">
-⏱ Duration: 25 Minutes<br>
-🔥 Calories Burned: 300-450<br>
-⭐ Difficulty: Easy
-</div>
-</div>
-
-<div class="card">
-<h3>🏋️ Strength Training</h3>
-<p>
-Build muscle mass and increase body strength
-through resistance exercises.
-</p>
-
-<div class="info">
-⏱ Duration: 45 Minutes<br>
-🔥 Calories Burned: 350-500<br>
-⭐ Difficulty: Intermediate
-</div>
-</div>
-
-<div class="card">
-<h3>🧘 Yoga Workout</h3>
-<p>
-Improves flexibility, balance and mental peace
-while reducing stress.
-</p>
-
-<div class="info">
-⏱ Duration: 30 Minutes<br>
-🔥 Calories Burned: 150-250<br>
-⭐ Difficulty: Easy
-</div>
-</div>
-
-<div class="card">
-<h3>🔥 HIIT Workout</h3>
-<p>
-High Intensity Interval Training for maximum
-fat burning in minimum time.
-</p>
-
-<div class="info">
-⏱ Duration: 20 Minutes<br>
-🔥 Calories Burned: 400-600<br>
-⭐ Difficulty: Advanced
-</div>
-</div>
-
-<div class="card">
-<h3>🏠 Home Workout</h3>
-<p>
-No gym equipment required. Perfect for daily
-fitness at home.
-</p>
-
-<div class="info">
-⏱ Duration: 20 Minutes<br>
-🔥 Calories Burned: 200-300<br>
-⭐ Difficulty: Beginner
-</div>
-</div>
-
-</div>
-
-<div class="tip">
-
-<h2>💡 Workout Tips</h2>
-
-<p>✅ Always warm up before starting.</p>
-<p>✅ Maintain correct posture.</p>
-<p>✅ Stay hydrated during workout.</p>
-<p>✅ Take proper rest between sets.</p>
-<p>✅ Cool down after workout.</p>
-
-</div>
-
-<div class="quote">
-"Success starts with self-discipline."
-</div>
-
-<center>
-<a href="home.html" class="back">
-← Back To Home
-</a>
-</center>
-
-</div>
-
-<footer>
-© 2026 SportFit | Workout Zone
-</footer>
-
-</body>
-</html>
+  <script src="js/firebase-config.js"></script>
+  <script type="module">
+    import { initApp } from './js/app.js';
+    import { bindNavAuthState } from './js/auth.js';
+    initApp();
+    bindNavAuthState();
+  </script>
 </body>
 </html>

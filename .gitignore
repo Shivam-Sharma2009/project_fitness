@@ -4,4 +4,5 @@ node_modules/
 *.log
 .firebase/
 .vercel/
+frontend/js/firebase-config.js
 frontend/js/firebase-config-local.js
